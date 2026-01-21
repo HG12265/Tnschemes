@@ -6,13 +6,15 @@ const DetailsForm = ({ categoryId, onBack, onSubmit }) => {
   const [formData, setFormData] = useState({});
 
   // Dynamic Fields based on Category
-  const getFields = () => {
+const getFields = () => {
+    // 1. All categories-kum common-ana questions
     const commonFields = [
       { id: 'age', label: 'Age', type: 'number', icon: <Calendar />, placeholder: 'e.g. 21' },
       { id: 'income', label: 'Annual Family Income (₹)', type: 'number', icon: <Landmark />, placeholder: 'e.g. 150000' },
       { id: 'caste', label: 'Community', type: 'select', icon: <User />, options: ['OC', 'BC', 'MBC/DNC', 'SC', 'ST'] },
     ];
 
+    // 2. Specific questions for each category
     const specificFields = {
       student: [
         { id: 'edu_level', label: 'Current Education', type: 'select', options: ['School', 'Diploma', 'UG', 'PG'] },
@@ -21,11 +23,38 @@ const DetailsForm = ({ categoryId, onBack, onSubmit }) => {
       ],
       farmer: [
         { id: 'land_size', label: 'Land Size (Acres)', type: 'number', placeholder: 'e.g. 2.5' },
-        { id: 'crop_type', label: 'Primary Crop', type: 'text', placeholder: 'e.g. Paddy' }
+        { id: 'farmer_type', label: 'Farmer Category', type: 'select', options: ['Small Farmer', 'Marginal Farmer', 'Tenant Farmer'] },
+        { id: 'crop_type', label: 'Primary Crop', type: 'text', placeholder: 'e.g. Paddy / Sugarcane' }
       ],
       women: [
         { id: 'marital_status', label: 'Marital Status', type: 'select', options: ['Unmarried', 'Married', 'Widow', 'Deserted'] },
-        { id: 'is_head', label: 'Head of Family in Ration Card?', type: 'select', options: ['Yes', 'No'] }
+        { id: 'is_head', label: 'Head of Family (in Ration Card)?', type: 'select', options: ['Yes', 'No'] },
+        { id: 'has_shg', label: 'Member of Self Help Group (SHG)?', type: 'select', options: ['Yes', 'No'] }
+      ],
+      senior: [
+        { id: 'is_pensioner', label: 'Already Receiving Any Pension?', type: 'select', options: ['Yes', 'No'] },
+        { id: 'living_status', label: 'Living Situation', type: 'select', options: ['With Family', 'Alone', 'Old Age Home'] },
+        { id: 'health_condition', label: 'Any Chronic Diseases?', type: 'select', options: ['None', 'Diabetes/BP', 'Critical Illness'] }
+      ],
+      youth: [
+        { id: 'qualification', label: 'Highest Qualification', type: 'select', options: ['10th Pass', '12th Pass', 'Diploma', 'Degree'] },
+        { id: 'pass_out_year', label: 'Year of Passing', type: 'number', placeholder: 'e.g. 2023' },
+        { id: 'employment_reg', label: 'Registered in Employment Exchange?', type: 'select', options: ['Yes', 'No'] }
+      ],
+      disabled: [
+        { id: 'disability_type', label: 'Type of Disability', type: 'select', options: ['Locomotor', 'Visual', 'Hearing', 'Mental Health'] },
+        { id: 'disability_percentage', label: 'Disability Percentage (%)', type: 'number', placeholder: 'e.g. 40' },
+        { id: 'has_udid', label: 'Have UDID National ID Card?', type: 'select', options: ['Yes', 'No'] }
+      ],
+      worker: [
+        { id: 'sector', label: 'Work Sector', type: 'select', options: ['Construction', 'Handloom/Weaving', 'Tailoring', 'Driver', 'Others'] },
+        { id: 'welfare_board', label: 'Registered in Welfare Board?', type: 'select', options: ['Yes', 'No'] },
+        { id: 'ration_card', label: 'Ration Card Type', type: 'select', options: ['PHH (Rice)', 'PHH-AAY (Antyodaya)', 'NPHH'] }
+      ],
+      entrepreneur: [
+        { id: 'biz_stage', label: 'Business Stage', type: 'select', options: ['Idea Phase', 'Early Startup', 'Existing Business'] },
+        { id: 'biz_type', label: 'Industry Type', type: 'select', options: ['Manufacturing', 'Service', 'Trading', 'Technology'] },
+        { id: 'loan_needed', label: 'Required Funding/Loan (₹)', type: 'number', placeholder: 'e.g. 500000' }
       ]
     };
 
