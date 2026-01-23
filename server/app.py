@@ -105,8 +105,6 @@ def match_schemes():
         print(f"Error: {str(e)}")
         return jsonify({"error": "AI Connection Failed"}), 500
 
-# app.py kulla intha route-ah add pannunga
-
 @app.route('/api/scheme-details', methods=['POST'])
 def get_scheme_details():
     try:
@@ -114,15 +112,19 @@ def get_scheme_details():
         scheme_name = data.get('scheme_name')
 
         prompt = f"""
-        Provide a detailed "How to Apply" guide for the Tamil Nadu Government scheme: "{scheme_name}".
-        
-        Include the following sections:
-        1. Required Documents (list format)
-        2. Application Process (Step-by-step)
-        3. Official Website Link (if any)
-        4. Offline Method (e.g., CSC Center, VAO office)
+        Provide a detailed application guide for the Tamil Nadu Government scheme: "{scheme_name}".
 
-        Keep the tone professional and helpful. Use clear headings.
+        Return the response ONLY as a JSON object:
+        1. "guide": A detailed step-by-step guide with documents required.
+        2. "url": The most RELIABLE official government main portal URL (e.g., tnesevai.tn.gov.in, tn.gov.in, or the specific department's landing page). 
+
+        STRICT RULE: Do not provide deep links that might result in 404 errors. Provide the main portal or landing page URL where the user can search for the scheme.
+
+        Format:
+        {{
+          "guide": "Step 1..., Step 2..., Required Documents...",
+          "url": "https://official-portal.tn.gov.in"
+        }}
         """
 
         payload = {
@@ -135,7 +137,9 @@ def get_scheme_details():
         response_data = response.json()
         ai_text = response_data['candidates'][0]['content']['parts'][0]['text']
         
-        return jsonify({"details": ai_text}), 200
+        # JSON-ah clean panni parse panrom
+        clean_json = ai_text.replace('```json', '').replace('```', '').strip()
+        return clean_json, 200, {'Content-Type': 'application/json'}
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
